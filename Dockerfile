@@ -1,10 +1,22 @@
 FROM php:7.4-apache
 
-RUN apt update && apt install -y libicu-dev && rm -rf /var/lib/apt/lists/*
-RUN docker-php-ext-install intl
+# PHP extensions installation
+RUN set -e; \
+    apt update; \
+    apt install -y libicu-dev; \
+    docker-php-ext-install intl mysqli; \
+    rm -rf /var/lib/apt/lists/*
 
-COPY src/ /var/www/html/mediawiki/
+# mediawiki app setup
+RUN set -e; \
+    curl -fSL -o mediawiki-1.39.0.tar.gz https://releases.wikimedia.org/mediawiki/1.39/mediawiki-1.39.0.tar.gz; \
+    tar -x --strip-components=1 -f ./mediawiki-1.39.0.tar.gz; \
+    rm -rf mediawiki-1.39.0.tar.gz; \
+    chown -R www-data:www-data extensions skins cache images; \
+    rm -rf /var/lib/apt/lists/*
 
-# Set www-data to have UID 1000
-RUN usermod -u 1000 www-data;
-USER www-data
+# mySql Directory setup
+RUN set -e; \
+    mkdir -p /var/www/data && chown www-data:www-data /var/www/data
+
+CMD ["apache2-foreground"]

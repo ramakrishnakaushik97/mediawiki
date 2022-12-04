@@ -1,0 +1,10 @@
+apiVersion : v1
+kind : ConfigMap
+metadata:
+  name : db-config
+data:
+  host : mysql
+  dbName: my_wiki
+  mysql_user: wikiuser
+  mysql_password: example
+  
