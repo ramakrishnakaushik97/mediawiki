@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: mediawiki-app
-        image: mediawiki-apache:1.0
+        image: ramakrishnakaushik97/mediawiki-apache:1.0
         ports:
         - containerPort: 80
 ---
